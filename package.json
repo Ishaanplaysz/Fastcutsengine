@@ -1,0 +1,42 @@
+{
+  "name": "fastcompute",
+  "version": "0.2.0",
+  "description": "Trusted peer compute exchange for Windows",
+  "main": "desktop/main.cjs",
+  "author": "FastCompute",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test tests/*.test.cjs",
+    "check": "node --check desktop/main.cjs && node --check desktop/network.cjs && node --check desktop/worker.cjs && node --check desktop/google.cjs && node --check ui/app.js && node --check ui/market.js",
+    "dist": "node scripts/prepare-release.cjs && node scripts/make-icon.cjs && electron-builder --win nsis --x64 --publish never",
+    "dist:preview": "node scripts/prepare-release.cjs --preview && node scripts/make-icon.cjs && electron-builder --win nsis --x64 --publish never --config.nsis.artifactName=FastCompute-Preview-${version}-${arch}.${ext}",
+    "test:ui": "node scripts/ui-smoke.cjs"
+  },
+  "dependencies": {
+    "selfsigned": "2.4.1"
+  },
+  "devDependencies": {
+    "electron": "38.2.0",
+    "electron-builder": "26.0.12",
+    "playwright-core": "1.56.1"
+  },
+  "build": {
+    "appId": "org.fastcompute.desktop",
+    "productName": "FastCompute",
+    "publish": [],
+    "directories": { "output": "release" },
+    "files": ["desktop/**/*", "ui/**/*", "assets/**/*", "package.json"],
+    "asarUnpack": ["desktop/gpu.py"],
+    "extraResources": [{ "from": ".build/google-oauth.json", "to": "google-oauth.json" }],
+    "win": { "target": "nsis", "icon": "assets/icon.ico", "signAndEditExecutable": false },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "artifactName": "FastCompute-Setup-${version}-${arch}.${ext}"
+    }
+  }
+}

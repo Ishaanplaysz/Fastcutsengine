@@ -1,0 +1,11 @@
+node_modules/
+release/
+*.log
+.runtime/
+.env
+.env.*
+client_secret*.json
+connection.bin
+identity.json
+ledger.json*
+.build/
